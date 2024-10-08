@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
-class OnLineExamCustomFormTextField extends StatelessWidget {
+class CustomTextFieldForm extends StatelessWidget {
   final Function(String)? onChanged;
+  final String? Function(String?)? onValidate;
   final bool obscureText;
   final String? hintText;
   final String? errorText;
   final TextEditingController? controller;
 
-  OnLineExamCustomFormTextField({
+  const CustomTextFieldForm({
+    super.key,
     this.hintText,
     this.onChanged,
     this.obscureText = false,
     this.errorText,
     this.controller,
+    this.onValidate,
   });
 
   @override
@@ -21,36 +24,38 @@ class OnLineExamCustomFormTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       onChanged: onChanged,
+      validator: onValidate,
       decoration: InputDecoration(
-        labelText: hintText, // Inside border label text
-        labelStyle: TextStyle(color: Colors.grey), // Label style color
-        errorText: errorText, // Error message text
-        enabledBorder: OutlineInputBorder(
+
+        labelText: hintText,
+        labelStyle: const TextStyle(color: Colors.grey),
+        errorText: errorText,
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.grey, // Border color when enabled
+            color: Colors.grey,
           ),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.blue, // Border color when focused
+            color: Colors.blue,
             width: 2.0,
           ),
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.red, // Border color when there's an error
+            color: Colors.red,
             width: 1.5,
           ),
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.red, // Border color when focused and has error
+            color: Colors.red,
             width: 2.0,
           ),
         ),
       ),
-      style: TextStyle(
-        color: Colors.black, // Text color
+      style: const TextStyle(
+        color: Colors.black,
       ),
     );
   }

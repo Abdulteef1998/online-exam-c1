@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:online_exam_c1_online/constants.dart';
+import 'package:online_exam_c1_online/core/utils/colors.dart';
+import 'package:online_exam_c1_online/core/utils/styles.dart';
+import 'package:online_exam_c1_online/view/signIn_screen/signIn_screen.dart';
+import 'package:online_exam_c1_online/widgets/custom_button.dart';
+import 'package:online_exam_c1_online/widgets/custom_text_field.dart';
 
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
-import 'on_line_exam_login_page.dart';
-
-class OnLineExamSignUpPage extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
   static String id = 'signup Page';
 
+  const SignUpScreen({super.key});
+
   @override
-  _OnLineExamSignUpPageState createState() => _OnLineExamSignUpPageState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _OnLineExamSignUpPageState extends State<OnLineExamSignUpPage> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController userNameController = TextEditingController();
   String? userName;
   String? firstName;
   String? lastName;
@@ -29,46 +33,44 @@ class _OnLineExamSignUpPageState extends State<OnLineExamSignUpPage> {
     return ModalProgressHUD(
       inAsyncCall: isLoading,
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
             key: formKey,
             child: ListView(
               children: [
+                10.verticalSpace,
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
-                    Text(
+                    const Text(
                       'Sign Up',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.black,
-                      ),
+                      style: Styles.textStyle20,
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 20),
-
-                // User Name Field
-                OnLineExamCustomFormTextField(
+                20.verticalSpace,
+                CustomTextFieldForm(
                   hintText: 'Enter your user name',
-                  onChanged: (data) {
-                    userName = data;
+                  controller: userNameController,
+                  onValidate: (val) {
+                    if(val!.isEmpty){
+                      return 'The user Name is not valid';
+                    }
+                    return null;
                   },
                 ),
-                const SizedBox(height: 15),
-
-                // First Name and Last Name Fields in a Row
+                8.verticalSpace,
                 Row(
                   children: [
                     Expanded(
-                      child: OnLineExamCustomFormTextField(
+                      child: CustomTextFieldForm(
                         hintText: 'Enter First Name',
                         onChanged: (data) {
                           firstName = data;
@@ -77,7 +79,7 @@ class _OnLineExamSignUpPageState extends State<OnLineExamSignUpPage> {
                     ),
                     const SizedBox(width: 15), // Space between fields
                     Expanded(
-                      child: OnLineExamCustomFormTextField(
+                      child: CustomTextFieldForm(
                         hintText: 'Last Name',
                         onChanged: (data) {
                           lastName = data;
@@ -86,22 +88,18 @@ class _OnLineExamSignUpPageState extends State<OnLineExamSignUpPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 15),
-
-                // Email Field
-                OnLineExamCustomFormTextField(
+                8.verticalSpace,
+                CustomTextFieldForm(
                   hintText: 'Email',
                   onChanged: (data) {
                     email = data;
                   },
                 ),
-                const SizedBox(height: 15),
-
-                // Password and Confirm Password Fields in a Row
+                8.verticalSpace,
                 Row(
                   children: [
                     Expanded(
-                      child: OnLineExamCustomFormTextField(
+                      child: CustomTextFieldForm(
                         hintText: 'Password',
                         obscureText: true,
                         onChanged: (data) {
@@ -111,7 +109,7 @@ class _OnLineExamSignUpPageState extends State<OnLineExamSignUpPage> {
                     ),
                     const SizedBox(width: 15), // Space between fields
                     Expanded(
-                      child: OnLineExamCustomFormTextField(
+                      child: CustomTextFieldForm(
                         hintText: 'Confirm Password',
                         obscureText: true,
                         onChanged: (data) {
@@ -121,40 +119,36 @@ class _OnLineExamSignUpPageState extends State<OnLineExamSignUpPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 15),
-
-                // Phone Number Field
-                OnLineExamCustomFormTextField(
+                8.verticalSpace,
+                CustomTextFieldForm(
                   hintText: 'Phone Number',
                   onChanged: (data) {
                     phoneNumber = data;
                   },
                 ),
-                const SizedBox(height: 30),
-
-                // Register Button
+                15.verticalSpace,
                 CustomButton(
                   onTap: () {
-                    // Handle registration logic here
+                    if(formKey.currentState!.validate()){
+                      print('');
+                    }
                   },
                   backgroundColor: kprimaryColor,
                   text: "Signup",
                 ),
-
-                const SizedBox(height: 10),
-
+                13.verticalSpace,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Already have an account? ',
                       style: TextStyle(color: Colors.black),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, OnLineExamLoginPage.id);
+                        Navigator.pushNamed(context, SignInScreen.id);
                       },
-                      child: Text(
+                      child: const Text(
                         ' Login',
                         style: TextStyle(
                           color: kprimaryColor,

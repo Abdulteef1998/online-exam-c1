@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  CustomButton({
+  const CustomButton({super.key,
     required this.onTap,
     required this.text,
-    this.backgroundColor = Colors.blue, // اللون الافتراضي للأزرار
-    this.borderRadius = 30.0, // لتحديد درجة استدارة الزوايا
+    this.backgroundColor = Colors.blue,
+    this.borderRadius = 30.0,
   });
 
   final VoidCallback? onTap;
   final String text;
   final Color backgroundColor;
-  final double borderRadius; // التحكم في استدارة الزوايا
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +21,12 @@ class CustomButton extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius:
-              BorderRadius.circular(borderRadius), // تغيير استدارة الزوايا
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
             ),
