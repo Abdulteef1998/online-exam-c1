@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:online_exam_c1_online/constants.dart';
-import 'package:online_exam_c1_online/pages/on_line_exam_forgot_passoword_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam_c1_online/core/helper/form_validation.dart';
+import 'package:online_exam_c1_online/core/utils/colors.dart';
+import 'package:online_exam_c1_online/core/utils/styles.dart';
+import 'package:online_exam_c1_online/view/forgot_password_screen/forgot_password_screen.dart';
+import 'package:online_exam_c1_online/view/signUp_screen/signUp_screen.dart';
+import 'package:online_exam_c1_online/widgets/custom_button.dart';
+import 'package:online_exam_c1_online/widgets/custom_text_field.dart';
 
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
-import 'on_line_exam_sign_up_page.dart';
-
-class OnLineExamLoginPage extends StatefulWidget {
+class SignInScreen extends StatefulWidget {
   static String id = 'login page';
 
+  const SignInScreen({super.key});
+
   @override
-  _OnLineExamLoginPageState createState() => _OnLineExamLoginPageState();
+  _SignInScreenState createState() => _SignInScreenState();
 }
 
-class _OnLineExamLoginPageState extends State<OnLineExamLoginPage> {
+class _SignInScreenState extends State<SignInScreen> {
   bool isLoading = false;
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isRememberMe = false;
-  bool _isEmailValid = true;
+  bool _isEmailValid = false;
   bool _isButtonEnabled = false;
-  String? email, password;
 
   void _validateForm() {
     final isEmailValid = _emailController.text.isNotEmpty &&
@@ -37,8 +40,8 @@ class _OnLineExamLoginPageState extends State<OnLineExamLoginPage> {
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(_validateForm);
-    _passwordController.addListener(_validateForm);
+    // _emailController.addListener(_validateForm);
+    // _passwordController.addListener(_validateForm);
   }
 
   @override
@@ -51,21 +54,21 @@ class _OnLineExamLoginPageState extends State<OnLineExamLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Form(
           key: formKey,
           child: ListView(
             children: [
+              10.verticalSpace,
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                    onPressed: () {},
                   ),
-                  Text(
+                  const Text(
                     'Login',
                     style: TextStyle(
                       fontSize: 24,
@@ -74,31 +77,28 @@ class _OnLineExamLoginPageState extends State<OnLineExamLoginPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-
-              // Email Field
-              OnLineExamCustomFormTextField(
+              20.verticalSpace,
+              CustomTextFieldForm(
                 controller: _emailController,
                 hintText: 'Email',
-                errorText: _isEmailValid ? null : 'This email is not valid',
-                onChanged: (data) {
-                  email = data;
+                onValidate: (val) {
+                  if (FormValidation.isNotValidEmail(val!)) {
+                    setState(() {
+                      _isEmailValid = true;
+                    });
+                    return 'This email is not valid';
+                  }
+                  return null;
                 },
               ),
-              const SizedBox(height: 10),
-
-              // Password Field
-              OnLineExamCustomFormTextField(
+              10.verticalSpace,
+              CustomTextFieldForm(
                 controller: _passwordController,
                 obscureText: true,
                 hintText: 'Password',
-                onChanged: (data) {
-                  password = data;
-                },
+                onValidate: (val) => FormValidation().isValidPassword(val!),
               ),
-              const SizedBox(height: 20),
-
-              // Remember Me and Forgot Password
+              10.verticalSpace,
               Row(
                 children: [
                   Checkbox(
@@ -109,63 +109,50 @@ class _OnLineExamLoginPageState extends State<OnLineExamLoginPage> {
                       });
                     },
                   ),
-                  Text('Remember me', style: TextStyle(color: Colors.black)),
-                  Spacer(),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     // Handle forgot password tap
-                  //   },
-                  //   child: Text(
-                  //     'Forgot password?',
-                  //     style: TextStyle(
-                  //       decoration: TextDecoration.underline,
-                  //       color: Colors.black,
-                  //     ),
-                  //   ),
-                  // ),
-
+                  const Text('Remember me',
+                      style: TextStyle(color: Colors.black)),
+                  const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(
-                          context, OnLineExamForgotPasswordPage.id);
+                      Navigator.pushNamed(context, ForgotPasswordScreen.id);
                     },
-                    child: Text(
+                    child: const Text(
                       ' Forgot password?',
                       style: TextStyle(
-                        color: kprimaryColor,
+                        color: Colors.black,
                         decoration: TextDecoration.underline,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
-
-              // Login Button
+              15.verticalSpace,
               CustomButton(
-                onTap: () {},
-                backgroundColor: kprimaryColor,
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    print('object');
+                  }
+                },
+                backgroundColor: _isEmailValid == true ? const Color(0xff878787) : kprimaryColor,
                 text: "LogIn",
               ),
-
-              const SizedBox(height: 10),
-
-              // Sign up link
+              13.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Don\'t have an account?',
-                    style: TextStyle(color: Colors.black),
+                    style: Styles.textStyle16,
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, OnLineExamSignUpPage.id);
+                      Navigator.pushNamed(context, SignUpScreen.id);
                     },
                     child: Text(
                       ' Sign up ',
-                      style: TextStyle(
+                      style: Styles.textStyle16.copyWith(
                         color: kprimaryColor,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ),
