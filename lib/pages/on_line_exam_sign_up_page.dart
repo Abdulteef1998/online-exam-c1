@@ -4,16 +4,16 @@ import 'package:online_exam_c1_online/constants.dart';
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
-import 'login_page.dart';
+import 'on_line_exam_login_page.dart';
 
-class OnLineExamRegisterPage extends StatefulWidget {
+class OnLineExamSignUpPage extends StatefulWidget {
   static String id = 'signup Page';
 
   @override
-  _OnLineExamRegisterPageState createState() => _OnLineExamRegisterPageState();
+  _OnLineExamSignUpPageState createState() => _OnLineExamSignUpPageState();
 }
 
-class _OnLineExamRegisterPageState extends State<OnLineExamRegisterPage> {
+class _OnLineExamSignUpPageState extends State<OnLineExamSignUpPage> {
   String? userName;
   String? firstName;
   String? lastName;
@@ -52,17 +52,7 @@ class _OnLineExamRegisterPageState extends State<OnLineExamRegisterPage> {
                     ),
                   ],
                 ),
-                // Row(
-                //   children: const [
-                //     Text(
-                //       ' Sign up',
-                //       style: TextStyle(
-                //         fontSize: 24,
-                //         color: Colors.white,
-                //       ),
-                //     ),
-                //   ],
-                // ),
+
                 const SizedBox(height: 20),
 
                 // User Name Field

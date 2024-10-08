@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:online_exam_c1_online/pages/on_line_exam_forgot_passoword_page.dart';
 
-import 'pages/login_page.dart';
-import 'pages/registeer_page.dart';
+import 'pages/on_line_exam_login_page.dart';
+import 'pages/on_line_exam_sign_up_page.dart';
 
 // Multi-layered application for maintainability and testing
 void main() {
@@ -17,7 +18,9 @@ class OnLineExam extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         OnLineExamLoginPage.id: (context) => OnLineExamLoginPage(),
-        OnLineExamRegisterPage.id: (context) => OnLineExamRegisterPage(),
+        OnLineExamSignUpPage.id: (context) => OnLineExamSignUpPage(),
+        OnLineExamForgotPasswordPage.id: (context) =>
+            OnLineExamForgotPasswordPage(),
       },
       initialRoute: OnLineExamLoginPage.id,
     );

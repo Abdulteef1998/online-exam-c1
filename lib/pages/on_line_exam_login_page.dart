@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_exam_c1_online/constants.dart';
+import 'package:online_exam_c1_online/pages/on_line_exam_forgot_passoword_page.dart';
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
@@ -110,15 +111,29 @@ class _OnLineExamLoginPageState extends State<OnLineExamLoginPage> {
                   ),
                   Text('Remember me', style: TextStyle(color: Colors.black)),
                   Spacer(),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     // Handle forgot password tap
+                  //   },
+                  //   child: Text(
+                  //     'Forgot password?',
+                  //     style: TextStyle(
+                  //       decoration: TextDecoration.underline,
+                  //       color: Colors.black,
+                  //     ),
+                  //   ),
+                  // ),
+
                   GestureDetector(
                     onTap: () {
-                      // Handle forgot password tap
+                      Navigator.pushNamed(
+                          context, OnLineExamForgotPasswordPage.id);
                     },
                     child: Text(
-                      'Forgot password?',
+                      ' Forgot password?',
                       style: TextStyle(
+                        color: kprimaryColor,
                         decoration: TextDecoration.underline,
-                        color: Colors.black,
                       ),
                     ),
                   ),
