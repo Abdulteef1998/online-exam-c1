@@ -40,8 +40,6 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void initState() {
     super.initState();
-    // _emailController.addListener(_validateForm);
-    // _passwordController.addListener(_validateForm);
   }
 
   @override
@@ -68,13 +66,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
                     onPressed: () {},
                   ),
-                  const Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.black,
-                    ),
-                  ),
+                  Text('Login',
+                      style: Styles.textStyle24.copyWith(color: Colors.black)),
                 ],
               ),
               20.verticalSpace,
@@ -109,20 +102,17 @@ class _SignInScreenState extends State<SignInScreen> {
                       });
                     },
                   ),
-                  const Text('Remember me',
-                      style: TextStyle(color: Colors.black)),
+                  Text('Remember me',
+                      style: Styles.textStyle16.copyWith(color: Colors.black)),
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, ForgotPasswordScreen.id);
                     },
-                    child: const Text(
-                      ' Forgot password?',
-                      style: TextStyle(
-                        color: Colors.black,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                    child: Text(' Forget password?',
+                        style: Styles.textStyle16.copyWith(
+                            color: Colors.black,
+                            decoration: TextDecoration.underline)),
                   ),
                 ],
               ),
@@ -133,7 +123,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     print('object');
                   }
                 },
-                backgroundColor: _isEmailValid == true ? const Color(0xff878787) : kprimaryColor,
+                backgroundColor: _isEmailValid == true
+                    ? const Color(0xff878787)
+                    : kprimaryColor,
                 text: "LogIn",
               ),
               13.verticalSpace,

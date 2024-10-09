@@ -18,6 +18,13 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController userNameController = TextEditingController();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   String? userName;
   String? firstName;
   String? lastName;
@@ -26,6 +33,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? confirmPassword;
   String? phoneNumber;
   bool isLoading = false;
+  bool _isEmailValid = false;
+
+  bool _isButtonEnabled = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -44,7 +54,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -60,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   hintText: 'Enter your user name',
                   controller: userNameController,
                   onValidate: (val) {
-                    if(val!.isEmpty){
+                    if (val!.isEmpty) {
                       return 'The user Name is not valid';
                     }
                     return null;
@@ -72,8 +83,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(
                       child: CustomTextFieldForm(
                         hintText: 'Enter First Name',
-                        onChanged: (data) {
-                          firstName = data;
+                        controller: _firstNameController,
+                        onValidate: (val) {
+                          if (val!.isEmpty) {
+                            return '';
+                          }
+                          return null;
                         },
                       ),
                     ),
@@ -81,8 +96,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(
                       child: CustomTextFieldForm(
                         hintText: 'Last Name',
-                        onChanged: (data) {
-                          lastName = data;
+                        controller: _lastNameController,
+                        onValidate: (val) {
+                          if (val!.isEmpty) {
+                            return '';
+                          }
+                          return null;
                         },
                       ),
                     ),
@@ -91,8 +110,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 8.verticalSpace,
                 CustomTextFieldForm(
                   hintText: 'Email',
-                  onChanged: (data) {
-                    email = data;
+                  controller: _emailController,
+                  onValidate: (val) {
+                    if (val!.isEmpty) {
+                      return 'This Email is not valid';
+                    }
+                    return null;
                   },
                 ),
                 8.verticalSpace,
@@ -101,9 +124,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(
                       child: CustomTextFieldForm(
                         hintText: 'Password',
-                        obscureText: true,
-                        onChanged: (data) {
-                          password = data;
+                        controller: _passwordController,
+                        onValidate: (val) {
+                          if (val!.isEmpty) {
+                            return '';
+                          }
+                          return null;
                         },
                       ),
                     ),
@@ -111,9 +137,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(
                       child: CustomTextFieldForm(
                         hintText: 'Confirm Password',
-                        obscureText: true,
-                        onChanged: (data) {
-                          confirmPassword = data;
+                        controller: _passwordController,
+                        onValidate: (val) {
+                          if (val!.isEmpty) {
+                            return 'Password not matched';
+                          }
+                          return null;
                         },
                       ),
                     ),
@@ -122,38 +151,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 8.verticalSpace,
                 CustomTextFieldForm(
                   hintText: 'Phone Number',
-                  onChanged: (data) {
-                    phoneNumber = data;
+                  controller: _phoneNumberController,
+                  onValidate: (val) {
+                    if (val!.isEmpty) {
+                      return '';
+                    }
+                    return null;
                   },
                 ),
                 15.verticalSpace,
                 CustomButton(
                   onTap: () {
-                    if(formKey.currentState!.validate()){
-                      print('');
+                    if (formKey.currentState!.validate()) {
+                      print('object');
                     }
                   },
-                  backgroundColor: kprimaryColor,
+                  backgroundColor: _isEmailValid == true
+                      ? const Color(0xff878787)
+                      : kprimaryColor,
                   text: "Signup",
                 ),
                 13.verticalSpace,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Already have an account? ',
-                      style: TextStyle(color: Colors.black),
-                    ),
+                    const Text('Already have an account? ',
+                        style: Styles.textStyle16),
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, SignInScreen.id);
                       },
-                      child: const Text(
-                        ' Login',
-                        style: TextStyle(
-                          color: kprimaryColor,
-                        ),
-                      ),
+                      child: Text(' Login',
+                          style: Styles.textStyle16
+                              .copyWith(color: kprimaryColor)),
                     ),
                   ],
                 ),

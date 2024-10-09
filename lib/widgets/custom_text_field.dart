@@ -26,7 +26,6 @@ class CustomTextFieldForm extends StatelessWidget {
       onChanged: onChanged,
       validator: onValidate,
       decoration: InputDecoration(
-
         labelText: hintText,
         labelStyle: const TextStyle(color: Colors.grey),
         errorText: errorText,
