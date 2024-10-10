@@ -24,18 +24,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isRememberMe = false;
   bool _isEmailValid = false;
-  bool _isButtonEnabled = false;
-
-  void _validateForm() {
-    final isEmailValid = _emailController.text.isNotEmpty &&
-        RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(_emailController.text);
-    final isPasswordValid = _passwordController.text.isNotEmpty;
-
-    setState(() {
-      _isEmailValid = isEmailValid;
-      _isButtonEnabled = isEmailValid && isPasswordValid;
-    });
-  }
 
   @override
   void initState() {

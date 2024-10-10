@@ -35,7 +35,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
   bool _isEmailValid = false;
 
-  bool _isButtonEnabled = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -72,6 +71,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: userNameController,
                   onValidate: (val) {
                     if (val!.isEmpty) {
+                      setState(() {
+                        _isEmailValid = true;
+                      });
                       return 'The user Name is not valid';
                     }
                     return null;
@@ -86,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: _firstNameController,
                         onValidate: (val) {
                           if (val!.isEmpty) {
-                            return '';
+                            return 'first name is required';
                           }
                           return null;
                         },
