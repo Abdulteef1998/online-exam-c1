@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:online_exam_c1_online/config/di.dart';
 import 'package:online_exam_c1_online/core/utils/colors.dart';
 import 'package:online_exam_c1_online/core/utils/styles.dart';
+import 'package:online_exam_c1_online/data/base/exceptions.dart';
 import 'package:online_exam_c1_online/view/signIn_screen/signIn_screen.dart';
+import 'package:online_exam_c1_online/view_model/signUp_view_model/signUp_contract.dart';
+import 'package:online_exam_c1_online/view_model/signUp_view_model/signup_view_model.dart';
 import 'package:online_exam_c1_online/widgets/custom_button.dart';
 import 'package:online_exam_c1_online/widgets/custom_text_field.dart';
 
@@ -17,7 +21,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  late TextEditingController userNameController;
+  late TextEditingController _userNameController;
 
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
@@ -34,7 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    userNameController = TextEditingController();
+    _userNameController = TextEditingController();
     _emailController = TextEditingController();
     _firstNameController = TextEditingController();
     _lastNameController = TextEditingController();
@@ -46,7 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-    userNameController.dispose();
+    _userNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -56,10 +60,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
+  SignupViewModel viewModel = getIt.get<SignupViewModel>();
+
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: isLoading,
+    return BlocProvider<SignupViewModel>(
+      create: (BuildContext context) => viewModel,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -84,115 +90,191 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ],
                 ),
-                20.verticalSpace,
-                CustomTextFieldForm(
-                  hintText: 'Enter your user name',
-                  controller: userNameController,
-                  onValidate: (val) {
-                    if (val!.isEmpty) {
-                      setState(() {
-                        _isEmailValid = true;
-                      });
-                      return 'The user Name is not valid';
+                BlocConsumer<SignupViewModel, SignupScreenState>(
+                  listenWhen: (previous, current) {
+                    if (previous is LoadingState || previous is ErrorState) {
+                      Navigator.pop(context);
                     }
-                    return null;
+                    return current is! InitialState;
                   },
-                ),
-                8.verticalSpace,
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextFieldForm(
-                        hintText: 'Enter First Name',
-                        controller: _firstNameController,
-                        onValidate: (val) {
-                          if (val!.isEmpty) {
-                            return 'first name is required';
+                  listener: (context, state) {
+                    switch (state) {
+                      case LoadingState():
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Row(
+                                children: [
+                                  const CircularProgressIndicator(),
+                                  3.horizontalSpace,
+                                  const Text("Loading")
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      case ErrorState():
+                        {
+                          var exception = state.exception;
+                          String? message = "something went wrong";
+                          if (exception is NoInternetException) {
+                            message = "Please check internet connection";
+                          } else if (exception is ServerError) {
+                            message = exception.serverMessage;
                           }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 15), // Space between fields
-                    Expanded(
-                      child: CustomTextFieldForm(
-                        hintText: 'Last Name',
-                        controller: _lastNameController,
-                        onValidate: (val) {
-                          if (val!.isEmpty) {
-                            return 'Enter your Last Name';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                8.verticalSpace,
-                CustomTextFieldForm(
-                  hintText: 'Email',
-                  controller: _emailController,
-                  onValidate: (val) {
-                    if (val!.isEmpty) {
-                      return 'This Email is not valid';
-                    }
-                    return null;
-                  },
-                ),
-                8.verticalSpace,
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextFieldForm(
-                        obscureText: true,
-                        hintText: 'Password',
-                        controller: _passwordController,
-                        onValidate: (val) {
-                          if (val!.isEmpty) {
-                            return 'Enter your Password';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 15), // Space between fields
-                    Expanded(
-                      child: CustomTextFieldForm(
-                        obscureText: true,
-                        hintText: 'Confirm Password',
-                        controller: _confirmPasswordController,
-                        onValidate: (val) {
-                          if (val!.isEmpty) {
-                            return 'Password not matched';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                8.verticalSpace,
-                CustomTextFieldForm(
-                  hintText: 'Phone Number',
-                  controller: _phoneNumberController,
-                  onValidate: (val) {
-                    if (val!.isEmpty) {
-                      return 'Enter your Phone Number';
-                    }
-                    return null;
-                  },
-                ),
-                15.verticalSpace,
-                CustomButton(
-                  onTap: () {
-                    if (formKey.currentState!.validate()) {
-                      print('object');
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Row(
+                                  children: [Text(message ?? "")],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      case SuccessState():
+                        {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Row(
+                                  children: [Text(state.appUser?.token ?? "")],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      default:
+                        {}
                     }
                   },
-                  backgroundColor: _isEmailValid == true
-                      ? const Color(0xff878787)
-                      : kprimaryColor,
-                  text: "Signup",
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        20.verticalSpace,
+                        CustomTextFieldForm(
+                          hintText: 'Enter your user name',
+                          controller: _userNameController,
+                          onValidate: (val) {
+                            if (val!.isEmpty) {
+                              setState(() {
+                                _isEmailValid = true;
+                              });
+                              return 'The user Name is not valid';
+                            }
+                            return null;
+                          },
+                        ),
+                        8.verticalSpace,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextFieldForm(
+                                hintText: 'Enter First Name',
+                                controller: _firstNameController,
+                                onValidate: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'first name is required';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 15), // Space between fields
+                            Expanded(
+                              child: CustomTextFieldForm(
+                                hintText: 'Last Name',
+                                controller: _lastNameController,
+                                onValidate: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Enter your Last Name';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        8.verticalSpace,
+                        CustomTextFieldForm(
+                          hintText: 'Email',
+                          controller: _emailController,
+                          onValidate: (val) {
+                            if (val!.isEmpty) {
+                              return 'This Email is not valid';
+                            }
+                            return null;
+                          },
+                        ),
+                        8.verticalSpace,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextFieldForm(
+                                obscureText: true,
+                                hintText: 'Password',
+                                controller: _passwordController,
+                                onValidate: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Enter your Password';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 15), // Space between fields
+                            Expanded(
+                              child: CustomTextFieldForm(
+                                obscureText: true,
+                                hintText: 'Confirm Password',
+                                controller: _confirmPasswordController,
+                                onValidate: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Password not matched';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        8.verticalSpace,
+                        CustomTextFieldForm(
+                          hintText: 'Phone Number',
+                          controller: _phoneNumberController,
+                          onValidate: (val) {
+                            if (val!.isEmpty) {
+                              return 'Enter your Phone Number';
+                            }
+                            return null;
+                          },
+                        ),
+                        15.verticalSpace,
+                        CustomButton(
+                          onTap: () {
+                            if (formKey.currentState!.validate()) {
+                              viewModel.register(
+                                _userNameController.text,
+                                _firstNameController.text,
+                                _lastNameController.text,
+                                _emailController.text,
+                                _passwordController.text,
+                                _confirmPasswordController.text,
+                                _phoneNumberController.text,
+                              );
+                            }
+                          },
+                          backgroundColor: _isEmailValid == true
+                              ? const Color(0xff878787)
+                              : kprimaryColor,
+                          text: "Signup",
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 13.verticalSpace,
                 Row(
@@ -218,7 +300,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  // Display a snackbar with a message
+  // Display a snack-bar with a message
   void showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

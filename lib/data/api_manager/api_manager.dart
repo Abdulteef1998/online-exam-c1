@@ -12,13 +12,25 @@ class ApiManager{
       baseUrl: ApiConstants.baseUrl
   ));
 
-  ApiManager();
+  ApiManager(){
+    _dio.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+      logPrint: (object) {
+        print('api ::   $object');
+      },
+    ));
+  }
 
   Future<AuthResponse> login(String email,String password) async{
     var apiCall = await _dio.post(ApiConstants.loginApi, data: {
       "email":email,
       "password":password
     });
+    print(apiCall.statusCode);
+    print(apiCall.data);
     return AuthResponse.fromJson(apiCall.data);
   }
 
