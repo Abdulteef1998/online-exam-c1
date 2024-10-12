@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:online_exam_c1_online/core/helper/form_validation.dart';
 import 'package:online_exam_c1_online/core/utils/colors.dart';
 import 'package:online_exam_c1_online/core/utils/styles.dart';
-import 'package:online_exam_c1_online/view/forgot_password_screen/verification_code_screen.dart';
 import 'package:online_exam_c1_online/widgets/custom_button.dart';
 import 'package:online_exam_c1_online/widgets/custom_text_field.dart';
 
@@ -33,6 +31,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +46,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },

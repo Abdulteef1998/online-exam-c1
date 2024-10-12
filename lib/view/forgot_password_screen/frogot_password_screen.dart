@@ -31,6 +31,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     _emailController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +46,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -88,10 +90,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 CustomButton(
                   onTap: () {
                     // if (formKey.currentState!.validate()) {
-                      /// after send emil to api to get code
-                      /// direct the page to verification code screen
-                      Navigator.pushNamed(
-                          context, VerificationCodeScreen.id);
+                    /// after send emil to api to get code
+                    /// direct the page to verification code screen
+                    Navigator.pushNamed(context, VerificationCodeScreen.id);
                     // }
                   },
                   backgroundColor: _isEmailValid == true

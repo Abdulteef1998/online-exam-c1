@@ -4,6 +4,8 @@ class AppUser {
   String? lastName;
   String? token;
   String? email;
+  String? resetCode;
+  String? newPassword;
 
   AppUser.fromData({
     this.id,
@@ -11,5 +13,7 @@ class AppUser {
     this.firstName,
     this.lastName,
     this.token,
+    this.resetCode,
+    this.newPassword,
   });
 }

@@ -26,6 +26,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
     _otpController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +41,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -66,7 +68,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                 Directionality(
                   textDirection: TextDirection.ltr,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 20),
                     child: PinCodeTextField(
                       length: 4,
                       appContext: context,
@@ -110,8 +113,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                     2.horizontalSpace,
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, ChangePasswordScreen.id);
+                        Navigator.pushNamed(context, ChangePasswordScreen.id);
                       },
                       child: Text(
                         'Resend?',

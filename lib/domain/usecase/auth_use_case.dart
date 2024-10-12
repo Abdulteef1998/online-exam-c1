@@ -25,4 +25,32 @@ class AuthUseCase {
     return authRepo.register(
         userName, firstName, lastName, email, password, rePassword, phone);
   }
+
+  Future<Result<AppUser?>> invokeForgotpassword(
+    String email,
+  ) {
+    return authRepo.forgotpassword(
+      email,
+    );
+  }
+
+  Future<Result<AppUser?>> invokeverifyresetcode(
+    String resetCode,
+  ) {
+    return authRepo.verifyresetcode(
+      resetCode,
+    );
+  }
+
+  Future<Result<AppUser?>> invokeresetpassword(
+    String email,
+    String newPassword,
+  ) {
+    return authRepo.resetpassword(
+      email,
+      newPassword,
+    );
+  }
 }
+
+ // resetpa
