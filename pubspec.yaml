@@ -57,7 +57,7 @@ dev_dependencies:
 
   # add the generator to your dev_dependencies
   injectable_generator:
-  build_runner:
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

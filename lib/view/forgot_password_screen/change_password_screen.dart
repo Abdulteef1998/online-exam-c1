@@ -101,9 +101,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 30.verticalSpace,
                 CustomButton(
                   onTap: () {
-                    if (formKey.currentState!.validate()) {
-                      /// call change password method here
-                    }
+                    if (formKey.currentState!.validate()) {}
                   },
                   backgroundColor: kprimaryColor,
                   text: "Continue",
