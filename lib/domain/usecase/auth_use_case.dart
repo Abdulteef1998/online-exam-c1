@@ -9,7 +9,10 @@ class AuthUseCase {
 
   AuthUseCase(this.authRepo);
 
-  Future<Result<AppUser?>> invoke(String email, String password) {
+  Future<Result<AppUser?>> invoke(
+    String email,
+    String password,
+  ) {
     return authRepo.login(email, password);
   }
 

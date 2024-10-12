@@ -17,25 +17,44 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController userNameController = TextEditingController();
+  late TextEditingController userNameController;
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
 
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  String? userName;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? password;
-  String? confirmPassword;
-  String? phoneNumber;
+  late final TextEditingController _firstNameController;
+  late final TextEditingController _lastNameController;
+  late final TextEditingController _phoneNumberController;
+
   bool isLoading = false;
   bool _isEmailValid = false;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    userNameController = TextEditingController();
+    _emailController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _phoneNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: _lastNameController,
                         onValidate: (val) {
                           if (val!.isEmpty) {
-                            return '';
+                            return 'Enter your Last Name';
                           }
                           return null;
                         },
@@ -125,11 +144,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     Expanded(
                       child: CustomTextFieldForm(
+                        obscureText: true,
                         hintText: 'Password',
                         controller: _passwordController,
                         onValidate: (val) {
                           if (val!.isEmpty) {
-                            return '';
+                            return 'Enter your Password';
                           }
                           return null;
                         },
@@ -138,8 +158,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(width: 15), // Space between fields
                     Expanded(
                       child: CustomTextFieldForm(
+                        obscureText: true,
                         hintText: 'Confirm Password',
-                        controller: _passwordController,
+                        controller: _confirmPasswordController,
                         onValidate: (val) {
                           if (val!.isEmpty) {
                             return 'Password not matched';
@@ -156,7 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _phoneNumberController,
                   onValidate: (val) {
                     if (val!.isEmpty) {
-                      return '';
+                      return 'Enter your Phone Number';
                     }
                     return null;
                   },
