@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam_c1_online/config/di.dart';
 import 'package:online_exam_c1_online/core/utils/constants.dart';
-import 'package:online_exam_c1_online/view/forgot_password_screen/frogot_password_screen.dart';
-import 'package:online_exam_c1_online/view/forgot_password_screen/verification_code_screen.dart';
-import 'package:online_exam_c1_online/view/signIn_screen/signIn_screen.dart';
-import 'package:online_exam_c1_online/view/signUp_screen/signUp_screen.dart';
+import 'package:online_exam_c1_online/screens/forgot_password_screen/change_password_screen.dart';
+import 'package:online_exam_c1_online/screens/forgot_password_screen/frogot_password_screen.dart';
+import 'package:online_exam_c1_online/screens/forgot_password_screen/verification_code_screen.dart';
+import 'package:online_exam_c1_online/screens/signIn_screen/signIn_screen.dart';
+import 'package:online_exam_c1_online/screens/signUp_screen/signUp_screen.dart';
 
-import 'view/forgot_password_screen/change_password_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

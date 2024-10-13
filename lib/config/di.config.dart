@@ -17,6 +17,8 @@ import '../dataSource/contracts/auth_data_source.dart' as _i581;
 import '../dataSource/impl/auth_data_source_impl.dart' as _i802;
 import '../domain/contract/repo/auth_repo.dart' as _i156;
 import '../domain/usecase/auth_use_case.dart' as _i959;
+import '../view_model/forgot_password_view_model/forgot_password_view_model.dart'
+    as _i254;
 import '../view_model/signIn_view_model/signin_view_model.dart' as _i1021;
 import '../view_model/signUp_view_model/signup_view_model.dart' as _i89;
 
@@ -38,6 +40,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i345.AuthRepositoryImpl(gh<_i581.AuthDataSource>()));
     gh.factory<_i959.AuthUseCase>(
         () => _i959.AuthUseCase(gh<_i156.AuthRepo>()));
+    gh.factory<_i254.ForgotViewModel>(
+        () => _i254.ForgotViewModel(gh<_i959.AuthUseCase>()));
     gh.factory<_i89.SignupViewModel>(
         () => _i89.SignupViewModel(gh<_i959.AuthUseCase>()));
     gh.factory<_i1021.LoginViewModel>(

@@ -5,7 +5,7 @@ import 'package:online_exam_c1_online/config/di.dart';
 import 'package:online_exam_c1_online/core/utils/colors.dart';
 import 'package:online_exam_c1_online/core/utils/styles.dart';
 import 'package:online_exam_c1_online/data/base/exceptions.dart';
-import 'package:online_exam_c1_online/view/signIn_screen/signIn_screen.dart';
+import 'package:online_exam_c1_online/screens/signIn_screen/signIn_screen.dart';
 import 'package:online_exam_c1_online/view_model/signUp_view_model/signUp_contract.dart';
 import 'package:online_exam_c1_online/view_model/signUp_view_model/signup_view_model.dart';
 import 'package:online_exam_c1_online/widgets/custom_button.dart';

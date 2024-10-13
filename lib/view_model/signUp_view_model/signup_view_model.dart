@@ -8,7 +8,6 @@ import 'package:online_exam_c1_online/view_model/signUp_view_model/signUp_contra
 @injectable
 class SignupViewModel extends Cubit<SignupScreenState> {
   AuthUseCase authUseCase;
-
   SignupViewModel(this.authUseCase) : super(InitialState());
 
   void register(String userName, String firstName, String lastName,

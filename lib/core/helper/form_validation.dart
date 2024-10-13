@@ -23,6 +23,9 @@ class FormValidation {
   }
 
   String? isValidPassword(String value) {
+    if(value.isEmpty){
+      return 'password is required';
+    }
     if (value.length <= 5) {
       return 'Wrong password';
     }

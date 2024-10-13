@@ -36,32 +36,31 @@ class ApiManager {
     return AuthResponse.fromJson(apiCall.data);
   }
 
-  Future<AuthResponse> forgotpassword(
-    String email,
-  ) async {
-    var apiCall =
-        await _dio.post(ApiConstants.forgotpasswordApi, data: {"email": email});
+  Future<AuthResponse> forgotPassword(String email) async {
+    var apiCall = await _dio.post(
+      ApiConstants.forgotPasswordApi,
+      data: {"email": email},
+    );
     print(apiCall.statusCode);
     print(apiCall.data);
     return AuthResponse.fromJson(apiCall.data);
   }
 
-  Future<AuthResponse> verifyresetcode(
-    String resetCode,
-  ) async {
-    var apiCall = await _dio
-        .post(ApiConstants.verifyresetcodeApi, data: {"resetCode": resetCode});
+  Future<AuthResponse> verifyResetCode(String resetCode) async {
+    var apiCall = await _dio.post(
+      ApiConstants.verifyResetCodeApi,
+      data: {"resetCode": resetCode},
+    );
     print(apiCall.statusCode);
     print(apiCall.data);
     return AuthResponse.fromJson(apiCall.data);
   }
 
-  Future<AuthResponse> resetpassword(
-    String email,
-    String newPassword,
-  ) async {
-    var apiCall = await _dio.post(ApiConstants.resetpasswordApi,
-        data: {"email": email, "newPassword": newPassword});
+  Future<AuthResponse> resetPassword(String email, String newPassword) async {
+    var apiCall = await _dio.put(
+      ApiConstants.resetPasswordApi,
+      data: {"email": email, "newPassword": newPassword},
+    );
     print(apiCall.statusCode);
     print(apiCall.data);
     return AuthResponse.fromJson(apiCall.data);

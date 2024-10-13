@@ -30,21 +30,17 @@ class AuthRepositoryImpl implements AuthRepo {
   }
 
   @override
-  Future<Result<AppUser?>> forgotpassword(
-    String email,
-  ) {
-    return authDataSource.forgotpassword(
-      email,
-    );
+  Future<Result<AppUser?>> forgotPassword(String email) {
+    return authDataSource.forgotPassword(email);
   }
 
   @override
-  Future<Result<AppUser?>> resetpassword(String email, String newPassword) {
-    return authDataSource.resetpassword(email, newPassword);
+  Future<Result<AppUser?>> resetPassword(String email, String newPassword) {
+    return authDataSource.resetPassword(email, newPassword);
   }
 
   @override
-  Future<Result<AppUser?>> verifyresetcode(String resetCode) {
-    return authDataSource.verifyresetcode(resetCode);
+  Future<Result<AppUser?>> verifyResetCode(String resetCode) {
+    return authDataSource.verifyResetCode(resetCode);
   }
 }

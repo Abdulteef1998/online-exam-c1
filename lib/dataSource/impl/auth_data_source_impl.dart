@@ -47,9 +47,9 @@ class AuthDatasourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<Result<AppUser?>> forgotpassword(String email) {
+  Future<Result<AppUser?>> forgotPassword(String email) {
     return executeApi<AppUser?>(() async {
-      var result = await apiManager.forgotpassword(
+      var result = await apiManager.forgotPassword(
         email,
       );
       return Success(result.user?.toAppUser());
@@ -57,20 +57,20 @@ class AuthDatasourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<Result<AppUser?>> resetpassword(String email, String newPassword) {
+  Future<Result<AppUser?>> resetPassword(String email, String newPassword) {
     return executeApi<AppUser?>(
       () async {
-        var result = await apiManager.resetpassword(email, newPassword);
+        var result = await apiManager.resetPassword(email, newPassword);
         return Success(result.user?.toAppUser());
       },
     );
   }
 
   @override
-  Future<Result<AppUser?>> verifyresetcode(String resetCode) {
+  Future<Result<AppUser?>> verifyResetCode(String resetCode) {
     return executeApi<AppUser?>(
       () async {
-        var result = await apiManager.verifyresetcode(resetCode);
+        var result = await apiManager.verifyResetCode(resetCode);
         return Success(result.user?.toAppUser());
       },
     );
