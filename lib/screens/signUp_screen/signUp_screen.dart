@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam_c1_online/config/di.dart';
+import 'package:online_exam_c1_online/core/helper/snack_bar.dart';
 import 'package:online_exam_c1_online/core/utils/colors.dart';
 import 'package:online_exam_c1_online/core/utils/styles.dart';
 import 'package:online_exam_c1_online/data/base/exceptions.dart';
@@ -92,28 +93,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 BlocConsumer<SignupViewModel, SignupScreenState>(
                   listenWhen: (previous, current) {
-                    if (previous is LoadingState || previous is ErrorState) {
-                      Navigator.pop(context);
-                    }
                     return current is! InitialState;
                   },
                   listener: (context, state) {
                     switch (state) {
-                      case LoadingState():
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: Row(
-                                children: [
-                                  const CircularProgressIndicator(),
-                                  3.horizontalSpace,
-                                  const Text("Loading")
-                                ],
-                              ),
-                            );
-                          },
-                        );
                       case ErrorState():
                         {
                           var exception = state.exception;
@@ -122,29 +105,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             message = "Please check internet connection";
                           } else if (exception is ServerError) {
                             message = exception.serverMessage;
+                          } else if (exception is ParsingError) {
+                            message = exception.parsingErrorMessage;
                           }
-                          showDialog(
+                          return ShowSnackBar.show(
                             context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Row(
-                                  children: [Text(message ?? "")],
-                                ),
-                              );
-                            },
+                            message: message ?? "",
+                            isSuccess: false,
                           );
                         }
                       case SuccessState():
                         {
-                          showDialog(
+                          return ShowSnackBar.show(
                             context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Row(
-                                  children: [Text(state.appUser?.token ?? "")],
-                                ),
-                              );
-                            },
+                            message: 'sign up successfully',
+                            isSuccess: true,
                           );
                         }
                       default:
@@ -152,6 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                   builder: (context, state) {
+                    isLoading = state is LoadingState;
                     return Column(
                       children: [
                         20.verticalSpace,
@@ -214,8 +190,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: [
                             Expanded(
                               child: CustomTextFieldForm(
-                                obscureText: true,
                                 hintText: 'Password',
+                                isPassword: true,
                                 controller: _passwordController,
                                 onValidate: (val) {
                                   if (val!.isEmpty) {
@@ -228,7 +204,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             const SizedBox(width: 15), // Space between fields
                             Expanded(
                               child: CustomTextFieldForm(
-                                obscureText: true,
+                                isPassword: true,
                                 hintText: 'Confirm Password',
                                 controller: _confirmPasswordController,
                                 onValidate: (val) {
@@ -253,25 +229,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         15.verticalSpace,
-                        CustomButton(
-                          onTap: () {
-                            if (formKey.currentState!.validate()) {
-                              viewModel.register(
-                                _userNameController.text,
-                                _firstNameController.text,
-                                _lastNameController.text,
-                                _emailController.text,
-                                _passwordController.text,
-                                _confirmPasswordController.text,
-                                _phoneNumberController.text,
-                              );
-                            }
-                          },
-                          backgroundColor: _isEmailValid == true
-                              ? const Color(0xff878787)
-                              : kprimaryColor,
-                          text: "Signup",
-                        ),
+                        isLoading
+                            ? const CircularProgressIndicator.adaptive()
+                            : CustomButton(
+                                onTap: () {
+                                  if (formKey.currentState!.validate()) {
+                                    viewModel.register(
+                                      _userNameController.text,
+                                      _firstNameController.text,
+                                      _lastNameController.text,
+                                      _emailController.text,
+                                      _passwordController.text,
+                                      _confirmPasswordController.text,
+                                      _phoneNumberController.text,
+                                    );
+                                  }
+                                },
+                                backgroundColor: _isEmailValid == true
+                                    ? const Color(0xff878787)
+                                    : kprimaryColor,
+                                text: "Signup",
+                              ),
                       ],
                     );
                   },

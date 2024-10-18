@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam_c1_online/config/di.dart';
 import 'package:online_exam_c1_online/core/helper/form_validation.dart';
+import 'package:online_exam_c1_online/core/helper/snack_bar.dart';
 import 'package:online_exam_c1_online/core/utils/colors.dart';
 import 'package:online_exam_c1_online/core/utils/styles.dart';
 import 'package:online_exam_c1_online/data/base/exceptions.dart';
@@ -25,6 +26,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final GlobalKey<FormState> formKey = GlobalKey();
   late final TextEditingController _emailController;
   bool _isEmailValid = false;
+  bool isLoading = false;
+  bool isSuccess = false;
 
   @override
   void initState() {
@@ -82,68 +85,33 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   20.verticalSpace,
                   BlocConsumer<ForgotViewModel, ForGotScreenState>(
                     listenWhen: (previous, current) {
-                      if (previous is LoadingState || previous is ErrorState) {
-                        Navigator.pop(context);
-                      }
                       return current is! InitialState;
                     },
                     listener: (context, state) {
                       switch (state) {
-                        case LoadingState():
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Row(
-                                  children: [
-                                    const CircularProgressIndicator(),
-                                    3.horizontalSpace,
-                                    const Text("Loading")
-                                  ],
-                                ),
-                              );
-                            },
-                          );
                         case ErrorState():
-                          {
-                            var exception = state.exception;
-                            String? message = "something went wrong";
-                            if (exception is NoInternetException) {
-                              message = "Please check internet connection";
-                            } else if (exception is ServerError) {
-                              message = exception.serverMessage;
-                            }
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  content: Row(
-                                    children: [Text(message ?? "")],
-                                  ),
-                                );
-                              },
-                            );
+                          var exception = state.exception;
+                          String? message = "something went wrong";
+                          if (exception is NoInternetException) {
+                            message = "Please check internet connection";
+                          } else if (exception is ServerError) {
+                            message = exception.serverMessage;
                           }
+                          return ShowSnackBar.show(
+                            context: context,
+                            message: message ?? "",
+                            isSuccess: false,
+                          );
                         case SuccessState():
-                          {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  content: Row(
-                                    children: [
-                                      Text(state.appUser?.token ?? "")
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        default:
-                          {}
+                          Navigator.pushNamed(
+                            context,
+                            VerificationCodeScreen.id,
+                          );
+                        default: {}
                       }
                     },
                     builder: (context, state) {
+                      isLoading = state is LoadingState;
                       return Column(
                         children: [
                           Form(
@@ -152,7 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               controller: _emailController,
                               hintText: 'Email',
                               onValidate: (val) {
-                                if(val!.isEmpty){
+                                if (val!.isEmpty) {
                                   return 'email is required';
                                 }
                                 if (FormValidation.isNotValidEmail(val)) {
@@ -166,25 +134,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                           ),
                           20.verticalSpace,
-                          CustomButton(
-                            onTap: () {
-                              // if (formKey.currentState!.validate()) {
-                              //   viewModel.forgotPassword(_emailController.text,
-                              //       (bool isSuccess) {
-                              //     if (isSuccess) {
-                              //       Navigator.pushNamed(
-                              //           context, VerificationCodeScreen.id);
-                              //     }
-                              //   });
-                              // }
-                              Navigator.pushNamed(
-                                  context, VerificationCodeScreen.id);
-                            },
-                            backgroundColor: _isEmailValid == true
-                                ? const Color(0xff878787)
-                                : kprimaryColor,
-                            text: "Continue",
-                          ),
+                          isLoading
+                              ? const CircularProgressIndicator.adaptive()
+                              : CustomButton(
+                                  onTap: () {
+                                    if (formKey.currentState!.validate()) {
+                                      viewModel.forgotPassword(
+                                          _emailController.text);
+                                    }
+                                  },
+                                  backgroundColor: _isEmailValid == true
+                                      ? const Color(0xff878787)
+                                      : kprimaryColor,
+                                  text: "Continue",
+                                ),
                         ],
                       );
                     },

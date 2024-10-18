@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam_c1_online/config/di.dart';
 import 'package:online_exam_c1_online/core/helper/form_validation.dart';
+import 'package:online_exam_c1_online/core/helper/snack_bar.dart';
 import 'package:online_exam_c1_online/core/utils/colors.dart';
 import 'package:online_exam_c1_online/core/utils/styles.dart';
 import 'package:online_exam_c1_online/data/base/exceptions.dart';
@@ -77,59 +78,39 @@ class _SignInScreenState extends State<SignInScreen> {
                 20.verticalSpace,
                 BlocConsumer<LoginViewModel, LoginScreenState>(
                   listenWhen: (previous, current) {
-                    if (previous is LoadingState || previous is ErrorState) {
-                      Navigator.pop(context);
-                    }
                     return current is! InitialState;
                   },
                   listener: (context, state) {
                     switch (state) {
-                      case LoadingState():
-                        showDialog(context: context, builder: (context) {
-                          return  AlertDialog(
-                            content: Row(
-                              children: [
-                                const CircularProgressIndicator(),
-                                3.horizontalSpace,
-                                const Text("Loading")
-                              ],
-                            ),
+                      case ErrorState():
+                        {
+                          var exception = state.exception;
+                          String? message = "something went wrong";
+                          if (exception is NoInternetException) {
+                            message = "Please check internet connection";
+                          } else if (exception is ServerError) {
+                            message = exception.serverMessage;
+                          }
+                          return ShowSnackBar.show(
+                            context: context,
+                            message: message ?? "",
+                            isSuccess: false,
                           );
-                        },);
-                      case ErrorState():{
-                        var exception = state.exception;
-                        String? message = "something went wrong";
-                        if(exception is NoInternetException){
-                          message = "Please check internet connection";
-                        }else if (exception is ServerError){
-                          message = exception.serverMessage;
                         }
-                        showDialog(context: context, builder: (context) {
-                          return AlertDialog(
-                            content: Row(
-                              children: [
-                                Text(message ??"")
-                              ],
-                            ),
+                      case SuccessState():
+                        {
+                          return ShowSnackBar.show(
+                            context: context,
+                            message: 'login successfully',
+                            isSuccess: true,
                           );
-                        },);
-                      }
-                      case SuccessState():{
-                        showDialog(context: context, builder: (context) {
-                          return AlertDialog(
-                            content: Row(
-                              children: [
-                                Text(state.appUser?.token ?? "")
-                              ],
-                            ),
-                          );
-                        },);
-                      }
-                      default:{
-                      }
+                        }
+                      default:
+                        {}
                     }
                   },
                   builder: (context, state) {
+                    isLoading = state is LoadingState;
                     return Column(
                       children: [
                         CustomTextFieldForm(
@@ -148,7 +129,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         10.verticalSpace,
                         CustomTextFieldForm(
                           controller: _passwordController,
-                          obscureText: true,
+                          isPassword: true,
                           hintText: 'Password',
                           onValidate: (val) =>
                               FormValidation().isValidPassword(val!),
@@ -181,11 +162,13 @@ class _SignInScreenState extends State<SignInScreen> {
                           ],
                         ),
                         15.verticalSpace,
-                        CustomButton(
+                        isLoading
+                            ? const CircularProgressIndicator.adaptive()
+                            : CustomButton(
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              viewModel.login(
-                                  _emailController.text, _passwordController.text);
+                              viewModel.login(_emailController.text,
+                                  _passwordController.text);
                             }
                           },
                           backgroundColor: _isEmailValid == true

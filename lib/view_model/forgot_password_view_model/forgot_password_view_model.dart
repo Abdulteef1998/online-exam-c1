@@ -12,13 +12,12 @@ class ForgotViewModel extends Cubit<ForGotScreenState> {
   final AuthUseCase authUseCase;
   ForgotViewModel(this.authUseCase) : super(InitialState());
 
-  void forgotPassword(String email,Function callBack) async {
+  void forgotPassword(String email) async {
     emit(LoadingState());
     var result = await authUseCase.invokeForgotPassword(email);
     switch (result) {
       case Success<AppUser?>():
         emit(SuccessState(result.data));
-        callBack(true);
       case Fail<AppUser?>():
         emit(ErrorState(result.exception));
         break;
@@ -26,13 +25,12 @@ class ForgotViewModel extends Cubit<ForGotScreenState> {
     }
   }
 
-  void verifyResetCode(String resetCode,Function callBack) async {
+  void verifyResetCode(String resetCode) async {
     emit(LoadingState());
     var result = await authUseCase.invokeVerifyResetCode(resetCode);
     switch (result) {
       case Success<AppUser?>():
         emit(SuccessState(result.data));
-        callBack(true);
       case Fail<AppUser?>():
         emit(ErrorState(result.exception));
         break;
